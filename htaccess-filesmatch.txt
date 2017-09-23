@@ -1,0 +1,24 @@
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with /foo.js or /bar.js"
+Header always set AccessTest "FilesMatch forbid files by type"
+
+<FilesMatch "\.(js)$">
+Header always add ErrorRule "forbidden file type"
+Redirect 404
+#Redirect 403
+</FilesMatch>
+
+RedirectMatch 404 "\.(js)$"
+
+#
+# This was to see if FilesMatch will "head off access" early, i.e. send a 404 
+# without even checking for the file. This was the hope for Bots requesting 
+# known exploitable .js files by the dozen every day.
+#
+# This does not do that, the request is always check for existence, so that 
+# this is useless for that.
+#
+# But if you want to send a 403 or 410, these will do that.
+#
+# See also htaccess-filetype.txt.
+#

@@ -1,0 +1,22 @@
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "vary request data"
+Header always set AccessTest "SetEnvIf/Deny to forbid Bots"
+
+SetEnvIf Request_URI "(wp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)" STOP=yes
+SetEnvIf User-Agent "(GoogleImage|Favicon|WinHttp|Java|Python|Domain|SEO|Synapse)" STOP=yes
+SetEnvIf Referer "(top10|rankings|semalt|buttons|domain|solution|uptime|seo)" STOP=yes
+BrowserMatch "(Firefox/3\.6$|Firefox/22\.0$)" STOP=yes
+
+SetEnvIf Request_URI "\.(js|xml)" STOP=yes
+
+Deny from env=STOP
+
+#
+# Just like htaccess-setenvif.txt but works under all conditions. And added 
+# blocking of file type.
+#
+# This just might be the smallest (fastest, best?) way to easily maintain 
+# lists of Bots and objects to block.
+#
+# See also htaccess-basic.txt.
+#

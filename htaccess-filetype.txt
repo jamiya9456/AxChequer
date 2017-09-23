@@ -1,0 +1,27 @@
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with bar.txt or bar.js"
+Header always set AccessTest "forbid requests by file type"
+
+RewriteEngine on
+
+# With the following Rewrite rules, not found files redirect to index.php. 
+# However, for the millions of Bot requests to insecure code...
+
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L]
+
+# ... doing this (which has precedence) stops most of those cold, dead in 
+# their tracks, immediately, without (most likely) loading the megabytes of 
+# your WickedCoolBlog code.
+
+<FilesMatch "\.(js)$">
+Redirect 404
+</FilesMatch>
+
+#
+# Example only as most WikedCoolBlogs have Javascript files -- the other 
+# ways of blocking requests would be incorporated here... (left as an 
+# exercise for the reader -- how's that for a cop out?).
+#

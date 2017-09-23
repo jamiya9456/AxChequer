@@ -1,0 +1,26 @@
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with various agents"
+Header always set AccessTest "forbid user agents"
+
+<If "-z %{HTTP_USER_AGENT}">
+Header always add ErrorRule "empty user agent"
+Redirect 404
+</If>
+<ElseIf "%{HTTP_USER_AGENT} =~ /(GoogleImage|Favicon|WinHttp|Java|Python|Domain|SEO|Synapse)/i">
+Header always add ErrorRule "forbidden robot"
+Require all denied
+</ElseIf>
+<ElseIf "%{HTTP_USER_AGENT} == 'Mozilla/4.0 (compatible; MSIE 6.0; Windows XP)'" >
+Header always add ErrorRule "forbidden user agent"
+Redirect 404
+</ElseIf>
+<ElseIf "%{HTTP_USER_AGENT} =~ m#(Firefox/3\.6$|Firefox/22\.0$)#">
+Header always add ErrorRule "(REGEX) forbidden user agent"
+Redirect 404
+</ElseIf>
+
+#
+# Just for UA testing (also try BrowserMatch).
+#
+# See also htaccess-basic.txt.
+#

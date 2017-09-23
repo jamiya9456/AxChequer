@@ -1,0 +1,33 @@
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with /foo/ or /bar/"
+Header always set AccessTest "forbid requests by sub-string"
+
+SetEnvIf Request_URI "(foo|bar)" STOP=yes
+Header always add TestEnv "STOP = %{STOP}e"
+
+# a 404 here does not work, though any other status will
+<If "reqenv('STOP') == 'yes'">
+#Redirect 404
+Redirect 403
+</If>
+
+# and this works
+#RedirectMatch 403 "(foo|bar)"
+
+# and this works
+<If "%{REQUEST_URI} =~ /(foo|bar)/">
+Redirect 404
+</If>
+
+#
+# Trying to head off Bot requests. It does a funny thing. The first Redirect 
+# 403 for /foo/, which exists, works. But that Redirect 403 for /bar/, which 
+# does not exist, does not work, a normal 404 is sent.
+#
+# But the RedirectMatch 403 works for both.
+#
+# And as with FileMatch, the directories are still both looked for, which 
+# means Redirect 404 here has no benefit and is superfluous.
+#
+# See also htaccess-setenvif.txt, htaccess-filetype.txt.
+#

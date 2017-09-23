@@ -1,0 +1,35 @@
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with referer: seo"
+Header always set AccessTest "SetEnvIf/Referer"
+
+SetEnvIf Referer "(seo)" STOP=yes
+Header always add TestEnv "STOP = %{STOP}e"
+
+# this will not work
+<If "reqenv('STOP') == 'yes'">
+#Redirect 404
+#Redirect 403
+Require all denied
+</If>
+
+# but this will
+<If "%{HTTP_REFERER} =~ /(seo)/">
+Redirect 404
+</If>
+
+# and this will
+#RewriteEngine on
+#RewriteCond "%{ENV:STOP}" "yes"
+#RewriteRule ^ - [R=404]
+
+#
+# The "would be nice if reqenv() worked" is that it would be nice to have 
+# several of them all together:
+#
+#SetEnvIf Referer "(seo)" STOP=yes
+#SetEnvIf User-Agent "(seo)" STOP=yes
+#BrowserMatch "(seo)" STOP=yes
+#
+# and then that one <If "reqenv('STOP') == 'yes'>. Of course, Rewrite could 
+# be used as in the example above.
+#
