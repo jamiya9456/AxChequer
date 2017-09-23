@@ -62,7 +62,7 @@ by experimentation, and to be able to simulate Bots (by their signature &ndash;
 
 The added benefit of <code>The AxChequer</code> is for *learning Apache* 
 *configuration and Directives*. (A terminal with tail for seeing the error log, 
-an editor editing <code>.htaccess</code> and <code>http://localhost/ax/</code> 
+an editor editing <code>.htaccess</code> and <code>localhost/ax/</code> 
 in a Browser.)
 
 #### About Apache Configuration
