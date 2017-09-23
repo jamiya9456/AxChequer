@@ -1,22 +1,2 @@
 Header always set AccessChecker "v1.0.0"
-Header always set AccessUsage "try with/without file"
-Header always set AccessTest "SetEnv/reqenv"
-
-SetEnv TEST test
-Header always add TestEnv "TEST = %{TEST}e"
-
-<If "reqenv('TEST') == 'test'">
-Header always add TestEnv "reqenv - TEST = test"
-</If>
-<If "-n reqenv('TEST')">
-Header always add TestEnv "reqenv - TEST not empty"
-</If>
-<If "-z reqenv('TEST')">
-Header always add TestEnv "reqenv - TEST not set or empty"
-</If>
-
-#
-# This shows that Apache has some weird (to me anyway) "thing" that affects 
-# the reqenv() function; if a file name is on the URI "reqenv('TEST')" 
-# fails.
-#
+Header always set AccessTest "empty"
