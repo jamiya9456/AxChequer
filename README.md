@@ -14,7 +14,7 @@ with the access file to check in:
     <htdocs>/ax/check/
 
 That setup isolates the testing from itself by using <code>fsockopen</code> on 
-<code>http://localhost/ax/check/</code>.
+<code>localhost/ax/check/</code>.
 
 The directory structure:
 
