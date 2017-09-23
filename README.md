@@ -33,14 +33,14 @@ The directory structure:
 
 ### Usage
 
-Loading <code>http://localhost/ax/[index.php]</code> presents an HTML form with 
+Loading <code>localhost/ax/[index.php]</code> presents an HTML form with 
 inputs for:
 
     url:
     referer:
     agent:
 
-The default URL will be <code>http://localhost/ax/check/</code>
+The default URL will be <code>localhost/ax/check/</code>
 
 In addition there is a list of all the example access files from which to 
 choose to copy into <code>check/</code> for testing &ndash; or copy in your 
