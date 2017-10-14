@@ -1,26 +1,27 @@
+# htaccess-errordoc
 Header always set AccessChecker "v1.0.0"
-Header always set AccessUsage "referer seo/top10, file.js"
+Header always set AccessUsage "referer seo/semalt, file.js"
 Header always set AccessTest "ErrorDocument usage"
 
-# Many websites are content with "standard" Apache error documents, and many 
-# have their own customized 404 pages offering options, searching and a 
-# home link and the like.
-#
-# But when dealing with Bots, perhaps the most important things is not just 
+# When dealing with Bots, perhaps the most important things is not just 
 # detecting them as soon as possible, but to save bandwidth by sending them 
 # as little data as possible.
 #
-# The ErrorDocument Directive does that. The trick is when.
+# The ErrorDocument Directive can do that.
+
+# Defaulting them to a string is the easiest way:
 
 ErrorDocument 403 "403"
 ErrorDocument 404 "404"
 
-# Defaulting them is the easiest way (my preference), and for the megabytes 
-# of code CMS or Corporate site, perhaps a custom 404 function/template.
+# For a large CMS or Corporate site, use a custom 404/403 script/file:
 
-# For <If> it's a matter of:
+#ErrorDocument 403 "403-sitename.html"
+#ErrorDocument 404 "404-sitename.html"
 
-<If "%{HTTP_REFERER} =~ /(seo)/i">
+# <If> can be used to further customize output:
+
+<If "%{HTTP_REFERER} =~ /(seo|semalt)/i">
 Header always add ErrorRule "forbidden referer sub-string"
 ErrorDocument 404 "NO SOUP FOR YOU!"
 Redirect 404
@@ -32,21 +33,13 @@ ErrorDocument 404 "WHO ARE YOU AGAIN?"
 Redirect 404
 </If>
 
-# For Deny (see htaccess-setenvif-deny.txt) one could try something like:
+# For Deny one could try something like (see also htaccess-setenvif-deny.txt):
 
-SetEnvIf Request_URI "\.(js|xml)" STOP=yes
+SetEnvIf Request_URI "\.(js)" STOP=yes
 <If "reqenv('STOP') == 'yes'">
-ErrorDocument 403 "STOP"
+# this does not execute (see htaccess-setenv-reqenv.txt)
+Header always add ErrorRule "STOP=yes"
+ErrorDocument 403 "STOP THAT"
 </If>
 Deny from env=STOP
 
-# But there is that little "reqenv() don't work when file in URI" problem 
-# (see htaccess-setenv-reqenv.txt).
-
-# For other ways of blocking there is no chance (for any other intervening 
-# Directives), like Rewrite and Require. Many people multiple RewriteCond 
-# lines followed by the RewriteRule for a simple redirect for example:
-
-RewriteEngine on
-RewriteCond %{HTTP_REFERER} (top10) [NC]
-RewriteRule .* – [R=404]

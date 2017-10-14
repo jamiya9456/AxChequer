@@ -1,3 +1,4 @@
+# htaccess-setenv-setenvif
 Header always set AccessChecker "v1.0.0"
 Header always set AccessTest "SetEnv vs. SetEnvIf"
 
@@ -13,7 +14,7 @@ Require env OK
 
 #
 # From Apache:
-# The internal environment variables set by this directive are set after most 
+# The internal environment variables set by [SetEnv] are set after most 
 # early request processing directives are run, such as access control and 
 # URI-to-filename mapping. If the environment variable you're setting is meant 
 # as input into this early phase of processing such as the RewriteRule 

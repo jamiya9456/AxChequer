@@ -1,0 +1,50 @@
+# htaccess-basic-2.4
+Header always set AccessChecker "v1.0.0"
+Header always set AccessTest "basic stop Bots"
+
+<If "%{HTTP_REFERER} =~ /(top10|rankings|semalt|buttons|domain|solution|uptime|seo)/i">
+Header always add ErrorRule "forbidden referer sub-string"
+Redirect 404
+</If>
+<If "%{QUERY_STRING} =~ /(option)/">
+Header always add ErrorRule "forbidden query string"
+Redirect 404
+</If>
+<If "-z %{HTTP_USER_AGENT}">
+Header always add ErrorRule "empty user agent"
+Redirect 404
+</If>
+<ElseIf "%{HTTP_USER_AGENT} =~ /(GoogleImage|Favicon|WinHttp|Java|Python|Domain|SEO|Synapse)/i">
+Header always add ErrorRule "forbidden robot"
+Require all denied
+</ElseIf>
+<ElseIf "%{HTTP_USER_AGENT} == 'Mozilla/4.0 (compatible; MSIE 6.0; Windows XP)'" >
+Header always add ErrorRule "forbidden user agent"
+Redirect 404
+</ElseIf>
+<ElseIf "%{HTTP_USER_AGENT} =~ m#(Firefox/3\.6$|Firefox/22\.0$)#">
+Header always add ErrorRule "(REGEX) forbidden user agent"
+Redirect 404
+</ElseIf>
+
+<If "%{REQUEST_URI} =~ /(tmp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)/">
+Header always add ErrorRule "forbidden URI sub-string"
+Redirect 404
+</If>
+<If "%{REQUEST_URI} =~ /\.(js|xml)$/">
+Header always add ErrorRule "forbidden file type"
+Redirect 404
+</If>
+
+#
+# The basics of Bot blocking - shows that If are all that are needed for 90% 
+# of all blocking *without mod_rewrite*.
+#
+# The Header lines are *for tesing only and not required* -- but with shows 
+# a possible benefit of <If> in that more directives can be used for the 
+# blocking condition.
+#
+# See htaccess-setenvif-deny.txt for an even terser way to do this.
+# See htaccess-filetype.txt for working with Rewrite that redirects not 
+# founds to index.php.
+#

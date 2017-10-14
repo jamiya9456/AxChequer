@@ -1,13 +1,16 @@
+# htaccess-setenvif
 Header always set AccessChecker "v1.0.0"
 Header always set AccessUsage "vary request data"
 Header always set AccessTest "SetEnvIf to forbid Bots"
 
-SetEnvIfNoCase Request_URI "(wp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)" STOP=yes
+SetEnvIfNoCase Request_URI "(tmp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)" STOP=yes
 SetEnvIfNoCase User-Agent "(GoogleImage|Favicon|WinHttp|Java|Python|Domain|SEO|Synapse)" STOP=yes
 SetEnvIfNoCase Referer "(top10|rankings|semalt|buttons|domain|solution|uptime|seo)" STOP=yes
 BrowserMatch "(Firefox/3\.6$|Firefox/22\.0$)" STOP=yes
 
 Header always add ErrorRule "STOP = %{STOP}e"
+
+# 2.4+ only
 <If "reqenv('STOP') == 'yes'">
 Redirect 410
 </If>
@@ -17,14 +20,20 @@ RewriteCond "%{ENV:STOP}" "yes"
 RewriteRule ^ - [R=410]
 
 #
-# This looks nice, having many rules all together (adding and removing easy), 
-# but there are two problems:
+# This tests using an environment variable to issue a Redirect, but there are 
+# three problems:
 #
-# 1) The first line does not work (trying to block directory exploits) if the 
-#    directory does not exist; in that case a 404 is always sent (which is 
-#    why 410 is used).
+# 1) An upgrade to Apache (2.4.25) since I started this code changed Apache's 
+#    behavior so that a URL: "/tmp" results in a 301. Using "/tmp/" results in 
+#    the 410.
 #
-# 2) If the URI has a file name, like /foo.txt, none of them work.
+# 2) The <If...> does not work (trying to block directory exploits) if the 
+#    directory *does not exist*; in that case a 404 is always sent (which is 
+#    why 410 is used here). And that 404 has precdence over all directives.
 #
-# But see htaccess-setenvif-deny.txt for something that works.
+# 3) If the URI has a file name, like /foo.txt, none of them work.
+#
+# But the RewriteRule always works.
+#
+# See also htaccess-setenvif-deny.txt.
 #

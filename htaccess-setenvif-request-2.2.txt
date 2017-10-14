@@ -1,0 +1,25 @@
+# htaccess-setenvif-request-2.2
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with /foo/ or /bar/"
+Header always set AccessTest "forbid requests by sub-string"
+
+RedirectMatch 403 "(foo|bar)"
+
+<FilesMatch "(foo|bar)">
+Header always add ErrorRule "forbidden file type"
+Redirect 406
+</FilesMatch>
+
+#
+# The simple but no NoCase way to block Bot path requests.
+#
+# FilesMatch has precedence except for "/foo/" -- since foo exists,a 404 is 
+# always sent; but not for "/foo" though. With files, "foo/foo.txt" the 
+# redirects always happen.
+#
+# The directories are still both looked for, which means Redirect 404 here 
+# would be superfluous, *except* see htaccess-filetype.txt that would 
+# normally redirect not founds to index.php.
+#
+# See also htaccess-setenvif.txt, htaccess-filetype.txt.
+#

@@ -1,5 +1,6 @@
+# htaccess-filetype
 Header always set AccessChecker "v1.0.0"
-Header always set AccessUsage "try with bar.txt or bar.js"
+Header always set AccessUsage "try with bar.xml or bar.js"
 Header always set AccessTest "forbid requests by file type"
 
 RewriteEngine on
@@ -12,16 +13,36 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php [L]
 
-# ... doing this (which has precedence) stops most of those cold, dead in 
+# ... FilesMatch (which has precedence) stops most of those cold, dead in 
 # their tracks, immediately, without (most likely) loading the megabytes of 
 # your WickedCoolBlog code.
 
-<FilesMatch "\.(js)$">
+<Files ~ "\.(js|xml)$">
+Header always set ErrorRule "forbidden files"
+Redirect 404
+</Files>
+
+<FilesMatch "\.(js|xml)$">
+Header always set ErrorRule "forbidden filesmatch"
 Redirect 404
 </FilesMatch>
 
+# Files and FilesMatch are similar but differ slighly
+
+<Files ~ "(foo|bar)">
+Header always set ErrorRule "forbidden files path"
+Redirect 404
+</Files>
+
 #
 # Example only as most WikedCoolBlogs have Javascript files -- the other 
-# ways of blocking requests would be incorporated here... (left as an 
+# ways of blocking requests could be incorporated here... (left as an 
 # exercise for the reader -- how's that for a cop out?).
+#
+# The path "/foo/" results in a *200*. But "/foo" and "/foo/foo.txt" results 
+# in 404 as expected.
+#
+# P.S. DirectoryMatch would be useful, in my opinion, in .htaccess.
+#
+# See also htaccess-filesmatch.txt.
 #

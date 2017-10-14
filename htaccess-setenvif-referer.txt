@@ -1,8 +1,9 @@
+# htaccess-setenvif-referer
 Header always set AccessChecker "v1.0.0"
-Header always set AccessUsage "try with referer: seo"
+Header always set AccessUsage "try with referer: seo/semalt"
 Header always set AccessTest "SetEnvIf/Referer"
 
-SetEnvIf Referer "(seo)" STOP=yes
+SetEnvIf Referer "(seo|semalt)" STOP=yes
 Header always add TestEnv "STOP = %{STOP}e"
 
 # this will not work
@@ -13,7 +14,8 @@ Require all denied
 </If>
 
 # but this will
-<If "%{HTTP_REFERER} =~ /(seo)/">
+<If "%{HTTP_REFERER} =~ /(seo|semalt)/">
+Header always add ErrorRule "forbidden referer"
 Redirect 404
 </If>
 
@@ -24,12 +26,15 @@ Redirect 404
 
 #
 # The "would be nice if reqenv() worked" is that it would be nice to have 
-# several of them all together:
+# several directives all together:
 #
-#SetEnvIf Referer "(seo)" STOP=yes
-#SetEnvIf User-Agent "(seo)" STOP=yes
-#BrowserMatch "(seo)" STOP=yes
+#SetEnvIf Referer "(seo|semalt)" STOP=yes
+#SetEnvIf User-Agent "(seo|semalt)" STOP=yes
+#BrowserMatch "(seo|semalt)" STOP=yes
+#etc.
 #
 # and then that one <If "reqenv('STOP') == 'yes'>. Of course, Rewrite could 
-# be used as in the example above.
+# be used as in the example above. And, there are other directives to do this.
+#
+# See also htaccess-setenvif.txt, htaccess-setenvif-deny.txt, htaccess-basic.txt.
 #

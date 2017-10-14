@@ -1,3 +1,4 @@
+# htaccess-setenv-reqenv
 Header always set AccessChecker "v1.0.0"
 Header always set AccessUsage "try with/without file"
 Header always set AccessTest "SetEnv/reqenv"
@@ -16,7 +17,9 @@ Header always add TestEnv "reqenv - TEST not set or empty"
 </If>
 
 #
-# This shows that Apache has some weird (to me anyway) "thing" that affects 
-# the reqenv() function; if a file name is on the URI "reqenv('TEST')" 
-# fails.
+# This shows that Apache has some weird (to me anyway, as maybe I just missed 
+# it in the documentation) "thing" that affects the reqenv() function; if a 
+# file name is on the URI "reqenv('TEST')" fails...
+#
+# i.e. http://localhost/ax/check/ vs. http://localhost/ax/check/foo
 #

@@ -1,0 +1,32 @@
+# htaccess-filetype-2
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "try with bar.xml/.js or not founds"
+Header always set AccessTest "forbid requests by file type"
+
+# The following directive does was the Rewrite rules do for not found files 
+# to redirect to index.php...
+
+FallbackResource index.php
+
+# ... FilesMatch (which has precedence) stops Bots without loading the 
+# megabytes of your WickedCoolBlog code.
+
+<Files ~ "\.(js|xml)$">
+Header always set ErrorRule "forbidden files"
+Redirect 404
+</Files>
+
+<FilesMatch "\.(js|xml)$">
+Header always set ErrorRule "forbidden filesmatch"
+Redirect 404
+</FilesMatch>
+
+# Files and FilesMatch are similar but differ slighly
+
+RedirectMatch 404 "(foo|bar)"
+
+# paths work just as well
+
+#
+# See also htaccess-filetye.txt.
+#

@@ -1,2 +1,3 @@
+# htaccess-empty
 Header always set AccessChecker "v1.0.0"
 Header always set AccessTest "empty"
