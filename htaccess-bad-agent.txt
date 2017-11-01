@@ -49,7 +49,7 @@ Options +ExecCGI
 # "GET /robots.txt HTTP/1.0" 200 1143 "-" "Python-urllib/1.17"
 # "GET /?about HTTP/1.1" 200 1800 "-" "[basic UA ending with] Qt/4.8.2"
 #
-# (Both "about" URLs are valid.) And that's all they do. Since it/they do 
-# not use a valid robot UA for robots.txt there is no way to know how to 
-# Disallow them or how to find out what it/they are doung with the data.
+# And that's all they do. Since it/they do not use a valid robot UA for 
+# robots.txt there is no way to know how to Disallow them or how to find 
+# out what it/they are doing with the data.
 #
