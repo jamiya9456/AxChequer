@@ -1,0 +1,54 @@
+# htaccess-bad-agent
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "targeted UAs"
+Header always set AccessTest "Rewrite to forbid UAs"
+
+ErrorDocument 400 "bad User-Agent"
+
+RewriteEngine on
+
+# least resource usage version
+BrowserMatchNoCase "(|Java|Python|Qt/)" BADUA=yes
+RewriteCond "%{ENV:BADUA}" "yes"
+RewriteRule ^ - [R=400]
+
+# use a PHP script with a more detailed message
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule ^ ua.php
+
+# use a shell script with a more detailed message
+RewriteCond %{HTTP_USER_AGENT} ^Java [OR]
+RewriteCond %{HTTP_USER_AGENT} ^Python [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} Qt/
+RewriteRule ^ au.sh
+#RewriteRule ^ au.php
+
+# not needed if au.sh placed in /cgi-bin
+AddHandler cgi-script .sh
+Options +ExecCGI
+
+# would be nice if this sent the header and the text
+#RewriteRule ^ au.txt [R=400]
+
+#
+# More blocking by User-Agent. Works for 2.+ and does it the "fast" way with 
+# a short message, or by running a script to provide a more detailed 
+# message.
+#
+# I have no idea what such Bots are doing and of a human is looking at the 
+# data. I did this for "Python" and "Qt/" due to many requests like:
+#
+# "GET / HTTP/1.1" 200 12351 "-" "[basic UA ending with] Qt/4.8.2"
+# "GET /robots.txt HTTP/1.0" 200 1099 "-" "Python-urllib/1.17"
+# "GET /about/ HTTP/1.1" 200 5507 "-" "[basic UA ending with] Qt/4.8.2"
+#
+# Another site had these:
+#
+# "GET / HTTP/1.1" 200 7688 "-" "[basic UA ending with] Qt/4.8.2"
+# "GET /robots.txt HTTP/1.0" 200 1143 "-" "Python-urllib/1.17"
+# "GET /?about HTTP/1.1" 200 1800 "-" "[basic UA ending with] Qt/4.8.2"
+#
+# (Both "about" URLs are valid.) And that's all they do. Since it/they do 
+# not use a valid robot UA for robots.txt there is no way to know how to 
+# Disallow them or how to find out what it/they are doung with the data.
+#

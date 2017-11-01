@@ -1,0 +1,26 @@
+# htaccess-setenvif-deny
+Header always set AccessChecker "v1.0.0"
+Header always set AccessUsage "vary request data"
+Header always set AccessTest "SetEnvIf/Deny to forbid Bots"
+
+SetEnvIfNoCase Request_URI "(tmp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)" STOP=yes
+SetEnvIfNoCase User-Agent "(GoogleImage|Favicon|WinHttp|Java|Python|Domain|SEO|Synapse)" STOP=yes
+SetEnvIfNoCase Referer "(top10|rankings|semalt|buttons|domain|solution|uptime|seo)" STOP=yes
+BrowserMatch "(Firefox/3\.6$|Firefox/22\.0$)" STOP=yes
+
+SetEnvIf Request_URI "\.(js|xml)" STOP=yes
+
+Deny from env=STOP
+
+RewriteEngine on
+RewriteCond "%{ENV:STOP}" "yes"
+RewriteRule ^ - [R=404]
+
+
+#RedirectMatch 403 "(foo|bar)"
+RedirectMatch 404 "(tmp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)"
+
+<FilesMatch /(foo|bar)/>
+Header always add ErrorRule "forbidden file type"
+Redirect 406
+</FilesMatch>

@@ -1,4 +1,4 @@
-# htaccess-agent
+# htaccess-agent-2.4
 Header always set AccessChecker "v1.0.0"
 Header always set AccessUsage "try with various agents"
 Header always set AccessTest "forbid user agents"
@@ -21,7 +21,5 @@ Redirect 404
 </ElseIf>
 
 #
-# Just for UA testing (also try BrowserMatch).
-#
-# See also htaccess-basic.txt.
+# See also htaccess-bad-agent.txt.
 #

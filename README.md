@@ -1,5 +1,7 @@
 ## Apache Access Checker
 
+Version 2.0.0, second release. (Added a few more example files.)
+
 This is a tiny-simple PHP script and HTML form for testing `.htaccess` files. 
 Code name: `The AxChequer`.
 
