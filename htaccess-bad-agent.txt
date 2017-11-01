@@ -8,7 +8,8 @@ ErrorDocument 400 "bad User-Agent"
 RewriteEngine on
 
 # least resource usage version
-BrowserMatchNoCase "(|Java|Python|Qt/)" BADUA=yes
+BrowserMatchNoCase "(Java|Python|Qt/)" BADUA=yes
+RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
 RewriteCond "%{ENV:BADUA}" "yes"
 RewriteRule ^ - [R=400]
 
