@@ -36,7 +36,7 @@ Options +ExecCGI
 # a short message, or by running a script to provide a more detailed 
 # message.
 #
-# I have no idea what such Bots are doing and of a human is looking at the 
+# I have no idea what such Bots are doing and if a human is looking at the 
 # data. I did this for "Python" and "Qt/" due to many requests like:
 #
 # "GET / HTTP/1.1" 200 12351 "-" "[basic UA ending with] Qt/4.8.2"

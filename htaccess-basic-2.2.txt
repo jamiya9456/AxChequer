@@ -2,13 +2,61 @@
 Header always set AccessChecker "v1.0.0"
 Header always set AccessTest "basic stop Bots"
 
-RedirectMatch 404 "(tmp|trackback|manager|admin|xmlrpc|wordpress|editor|blog)"
-RedirectMatch 404 "\.(js|xml)$"
+ErrorDocument 403 "403"
+ErrorDocument 404 "404"
+ErrorDocument 400 "bad User-Agent"
 
-# Those are simpler but similar to 2.4+ <If "%{REQUEST_URI}...> (and no NoCase
-# version). But there are no 2.2 equivalent of the rest of the <If ...>'s in 
-# basic-2.4; all there is are the "set environment variable" directives.
+RewriteEngine on
+
+# CMS exploits
+RewriteCond %{QUERY_STRING} (register|option)
+RewriteRule ^ - [R=400]
+
+# bot code that improperly identify themselves
+BrowserMatch ^$ BADUA=yes
+BrowserMatchNoCase (Java|Python|Qt/) BADUA=yes
+
+RewriteCond "%{ENV:BADUA}" "yes"
+RewriteRule ^ - [R=401]
+
+# path substrings we do not like - see notes 
+RedirectMatch 402 "(?i:wp|trackback|manager|admin|xmlrpc|wordpress|editor|joomla|tiny|upload)"
+SetEnvIfNoCase Request_URI "(wp|trackback|manager|admin|xmlrpc|wordpress|editor|joomla|tiny|upload)" BADURI=yes
+
+RewriteCond "%{ENV:BADURI}" "yes"
+RewriteRule ^ - [R=402]
+
+# referers that are fraudulent or annoying
+SetEnvIfNoCase Referer "(w3data|top10|rankings|semalt|buttons|domain|solution|seo)" BADREF=yes
+
+RewriteCond "%{ENV:BADREF}" "yes"
+RewriteRule ^ - [R=403]
+
+# user-agents that are fraudulent or annoying
+BrowserMatch "(QQBrowser|CheckMark|Google-Image|Favicon|Synapse)" STOP=yes
+BrowserMatch "(Virusdie|Xenu|Netcraft|WinHttp|Domain|SEO)" STOP=yes
+
+RewriteCond "%{ENV:STOP}" "yes"
+RewriteRule ^ - [R=404]
 
 #
-# See htaccess-setenv.txt, htaccess-setenv-deny.txt.
+# Request URI path substring "blocking" by here sending a 404 does not lessen 
+# bandwidth nor increas performance, as Apache still reads the filesystem for 
+# the requested file (i.e. Apache does not, as was hoped, compare the URI 
+# "here" and stop right away; though the filesystem check will stop at the 
+# first part of the path that does not exist so it is still low impact.)
+#
+# However, URI file/path testing is useful to control the data sent: using 
+# a ErrorDocument string minimizes bandwith; other status codes can be sent; 
+# or targeted HTML or script files can be used.
+#
+# Also in this file, the order is used to show (test) precedence - the use 
+# of the varying 4xx status codes are meant for that, not for the real world.
+#
+# I doubt that sending a message like: "Please stop accessing this website." 
+# would ever deter a bot (whether a SEO clown, referer spammer, CMS exploit, 
+# etc.), but if there is ever a human eyeing a bot's logged responses, like  
+# bots based on the Python libraries, perhaps seeing a message like: 
+# "Improperly formed User-Agents are not allowed." just might get them to use 
+# a valid UA (which is extremely easy - and the right thing - to do).
 #

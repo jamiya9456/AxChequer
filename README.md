@@ -1,9 +1,9 @@
 ## Apache Access Checker
 
-Version 2.0.0, second release. (Added a few more example files.)
-
 This is a tiny-simple PHP script and HTML form for testing `.htaccess` files. 
 Code name: `The AxChequer`.
+
+(This is hasty code. It is not meant to be pretty. It just needs to work.)
 
 ### Installation
 
@@ -38,9 +38,11 @@ The directory structure:
 The access files test just a few directives at a time and have comments 
 about them were appropriate/useful. Some of them use 2.4+ directives.
 
-The point of these examples are for *stopping Bots looking for exploits* (and 
-annoying robots and other pests), trying to stop them early and to minimize 
-the data sent for them.
+The main point of these examples are for *stopping Bots looking for exploits* 
+(and annoying robots and other pests), trying to stop them early and to 
+minimize the data sent for them.
+
+(They are sloppy/incomplete as they are just for testing, not the real world.)
 
 ### Usage
 
@@ -93,3 +95,11 @@ The added benefit of `The AxChequer` is for *learning Apache configuration and D
 I'd like to encourage people to be generous in submitting issues and feedback.
 
 I still have much to learn about Apache configuration.
+
+### Change Log
+
+#### v2.0.0
+
+* Slight improvements to `index.php`.
+* Slight improvements to this file.
+* Slight improvements to the default `.htaccess`.
