@@ -1,2 +1,3 @@
+Empty User-Agent request-header fields are not allowed.
 Robots need to use an identifying User-Agent.
 A package/program/framework default User-Agent is not allowed.

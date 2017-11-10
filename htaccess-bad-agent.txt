@@ -17,19 +17,21 @@ RewriteRule ^ - [R=400]
 RewriteCond %{HTTP_USER_AGENT} ^$
 RewriteRule ^ ua.php
 
-# use a shell script with a more detailed message
+# use other files with a more detailed message
 RewriteCond %{HTTP_USER_AGENT} ^Java [OR]
 RewriteCond %{HTTP_USER_AGENT} ^Python [NC,OR]
 RewriteCond %{HTTP_USER_AGENT} Qt/
-RewriteRule ^ au.sh
-#RewriteRule ^ au.php
+# the .htm file will send a 200, the others a 400
+RewriteRule ^ ua.htm
+#RewriteRule ^ ua.sh
+#RewriteRule ^ ua.php
 
-# not needed if au.sh placed in /cgi-bin
+# not needed if ua.sh placed in /cgi-bin
 AddHandler cgi-script .sh
 Options +ExecCGI
 
 # would be nice if this sent the header and the text
-#RewriteRule ^ au.txt [R=400]
+#RewriteRule ^ ua.txt [R=400]
 
 #
 # More blocking by User-Agent. Works for 2.+ and does it the "fast" way with 
