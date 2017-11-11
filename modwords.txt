@@ -1,0 +1,4 @@
+; some spammer just put in product/brand words - these here are for flagging 
+; a comment for "moderation"
+SEO google
+cosmetic lipstick

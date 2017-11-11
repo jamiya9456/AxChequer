@@ -1,0 +1,2 @@
+; axblock referer regex matches
+/^(domaintools|uptime)/
