@@ -9,7 +9,7 @@ flag requests based on regular expressions or string matches of server data,
 and/or comment spam.
 
 >Update: The Access Blocker code now has it's own repository: 
->(AxBlock)[https://github.com/AndovaBegarin/AxBlock].
+>[AxBlock](https://github.com/AndovaBegarin/AxBlock).
 
 ### AxChequer Installation
 
