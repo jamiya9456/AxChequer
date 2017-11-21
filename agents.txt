@@ -1,6 +1,0 @@
-; axblock user-agent regex matches
-/^$/
-/null/
-/^(python|java)/i
-/^(uptime)/i
-/Trident\/5.0\)$/

@@ -2,9 +2,6 @@
 
 /*
    The AxChequer HTML/code to test Apache access.
-
-   Now also can use the AxBlock PHP code to block/flag users and/or comment 
-   spam.
 */
 
 const AXCHECK_VER = 'v2.0.1';
@@ -25,7 +22,7 @@ if (is_file(UA_LIST))
 if (is_file(RE_LIST))
 	$XRE = array_merge($XRE,file(RE_LIST,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES));
 // post data to variables
-const POST = ['referer','xreferer','agent','xagent','post','pout','pall','remote','comment','axblock', ];
+const POST = ['referer','xreferer','agent','xagent','post','pout','pall', ];
 if (empty($_POST['url']))
 	$_POST['url'] = URL.DIR;
 foreach (POST as $p)
@@ -45,21 +42,6 @@ if ($post) {
 	print_r($_POST);
 	print '</pre>';
 }
-// process request
-if ($axblock) {
-	define('AXTEST',1);
-	include 'axblock.php';
-	$axbres = '';
-	// have exited for server data blocked
-	// for comment data blocking need to return to caller with defines
-	if (defined('AXBLOCK_COMMENT_BAD'))
-		$axbres .= 'comment spam word: "'.AXBLOCK_COMMENT_BAD.'"';
-	if (defined('AXBLOCK_COMMENT_MOD'))
-		$axbres .= ' comment moderate words: "'.AXBLOCK_COMMENT_MOD.'"';
-	if ($axbres == '')
-		$axbres = 'nothing to block';
-	$axbres = 'axblock: '.$axbres;
-}
 ?>
 <head>
 <title>The AxChequer</title>
@@ -75,11 +57,9 @@ textarea{}
 </head>
 <body id="fff">
 <?php
-if (isset($axbres))
-	print($axbres);
-if ($url)
-	submit();
-
+// always send
+submit();
+// if default
 if (strpos($url,URL) === 0) {
 ?>
 <!-- examples list -->
@@ -95,7 +75,7 @@ foreach ($HTA as $hta) {
 <button>select</button>
 </form>
 </div>
-<?php } ?>
+<?php } // end if default ?>
 <!-- submit form -->
 <form method="post">
 <input type="text" name="url" value="<?=$_POST['url']?>"> url <br>
@@ -119,13 +99,10 @@ foreach ($XUA as $xua) {
 }
 ?>
 </select> agent from list <br>
-<input type="text" name="remote" title="for axblock" value="<?=$_POST['remote']?>"> IP <br>
-<input type="text" name="comment" title="for axblock" value="<?=$_POST['comment']?>"> comment data <br>
 output:
 <span title="show POST data"><input type="checkbox" name="post" <?=c($post)?>> post </span>
 <span title="show header to be sent"><input type="checkbox" name="pout" <?=c($pout)?>> out </span>
 <span title="show all returned data"><input type="checkbox" name="pall" <?=c($pall)?>> all </span>
-<span title="use axblock.php"><input type="checkbox" name="axblock" <?=c($axblock)?>> axblock </span>
 <button name="button">send</button> <a href="<?=$_SERVER['PHP_SELF']?>">reset</a> <br>
 </form>
 <?php

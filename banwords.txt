@@ -1,9 +1,0 @@
-; 99% of comment spam is for embedding links in hope that the CMS/Forum will 
-; convert them to HTML anchors for user/search engines to find -- so that 
-; these are all need to be banned - though any word/phrase can be blocked like 
-; profanity, etc.
-[url=
-[link=
-http://
-href=
-/[a-zA-Z\.]+@[a-zA-Z]+\.(com|org|net|info|biz)/

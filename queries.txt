@@ -1,3 +1,0 @@
-; query string regex matches - seems joomla, and perhaps some others, has 
-; vulnerabilities with these two
-/(option|register)/
